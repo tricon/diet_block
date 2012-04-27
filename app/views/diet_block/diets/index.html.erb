@@ -6,7 +6,7 @@
     <%= link_to 'New Diet', new_user_diet_path(@user), class: 'btn primary',
       style: 'float: right;' if can? :create, Diet %>
   </div>
-  <% if @diets.present? %>
+  <% if @diets.present? && @user.program_day >= Settings.diets.default_diet_expires_on_day %>
     <table class="zebra-striped">
       <tbody>
         <%= render @diets %>
@@ -15,12 +15,12 @@
   <% else %>
     <div class="diet-date-title">
       <div class="week"><%= Settings.diets.default_title %></div>
-      <div class="small"><%= "Days 1 - #{Settings.diets.default_diet_expires_on_day - 1}" %></div>
+      <div class="small"><%= "Days 1 - #{Settings.diets.default_diet_expires_on_day}" %></div>
     </div>
     <div class="clear">
     </div>
     <div class="meal-type">
-      <%= Settings.diets.default.html_safe %>
+      <div class="pad"><%= Settings.diets.default.html_safe %></div>
     </div>
   <% end %>
 </div>
