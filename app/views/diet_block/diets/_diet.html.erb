@@ -1,0 +1,32 @@
+<% if can?(:read, diet) %>
+  <tr>
+    <td>
+      <div class="diet-date-title">
+        <div class="week">
+          <%= diet.title %>
+        </div>
+        <div class="small">
+          <% if diet.title !~ /Maintenance/ %>
+            <%= "Days #{diet.begin_day} - #{diet.end_day}" %>
+          <% end %>
+        </div>
+      </div>
+      <%= link_to 'Edit', edit_user_diet_path(@user, diet) if can? :update, diet %>
+      <%= link_to 'Delete', user_diet_path(@user, diet), class: 'danger', 
+        method: :delete, confirm: 'Are you sure?' if can? :destroy, diet %>
+      <div class="clear"></div>
+      <% diet.meals.sort { |x,y| x.meal_type.order <=> y.meal_type.order }.group_by(&:meal_type).each do |meal_type_group, meals| %>
+        <div class="meal-type">
+          <b><%= "#{meal_type_group.title}:" %></b>
+          <% meals.each do |meal| %>
+            <% next if meal.value == "0" %>
+            <% @amayw = true if meal.value.strip === "AMAYW" %>
+            <% comma = meal != meals.last ? "," : "" %>
+            <%= "#{meal.value}#{meal.meal_aspect.unit unless meal.value === "AMAYW"} #{meal.meal_aspect.name}#{comma}" unless meal.value.empty? %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= "*AMAYW: As much as you want" if @amayw %>
+    </td>
+  </tr>
+<% end %>

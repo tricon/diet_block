@@ -1,0 +1,61 @@
+<%= link_to "Back to #{@user.short_name}'s diets", user_diets_path(@user) %>
+<div class="row">
+  <div class="span6 offset1 new-diet-plan-weekly-photo">
+    <% if @user.weekly_photo.present? %>
+      <%= link_to(image_tag(@user.weekly_photo.image.url(:large)), main_app.user_weekly_photo_path(@user, @user.weekly_photo)) %>
+    <% else %>
+      <%= image_tag "/images/weekly_photo_placeholder.jpg" %>
+    <% end %>
+    <br>
+    <h4><%= "Week #{@user.weekly_photo.week}" if @user.weekly_photo %></h4>
+    <div>
+      <div class="new-diet-plan-weekly-photo small">
+        <% @user.weekly_photos.each do |wp| %>
+          <%= image_tag wp.image.url(:thumb) %>
+        <% end %>
+      </div>
+    </div>
+    <div class="body-shots">
+      <%= image_tag @user.application.body_shot_front_photo.url(:medium) %>
+      <%= image_tag @user.body_shot_side_photo.url(:medium) %>
+    </div>
+    <div>
+      <b>Height:</b> <%= @user.height_in_cm %>
+      <br>
+      </br>
+      <b>Starting Weight:</b> <%= @user.weight_in_kg %>
+    </div>
+    <% if @user.diets.before(@diet) %>
+      <div>
+        <h4>Previous Diet</h4>
+        <%= render partial: 'diet', object: @user.diets.before(@diet) %>
+      </div>
+    <% end %>
+  </div>
+  <div class="span8">
+    <%= @user.meal_plan.notes %>
+    <h3><%= @diet.title %></h3>
+    <%= form_for [@user, @diet], html: { class: 'form-stacked diet-form' } do |f| %>
+      <%= f.hidden_field :id %>
+      <%= f.hidden_field :order %>
+
+      <% @diet.meals.sort_by { |meal| [meal.meal_type.order, meal.meal_aspect.order] }.group_by(&:meal_type).each do |meal_type_group, meal| %>
+        <div class="meal-type">
+          <h3><%= meal_type_group.name %></h3>
+          <%= f.fields_for :meals, meal do |m| %>
+            <%= m.hidden_field :meal_type_id, as: :hidden %>
+
+            <div class="meal-aspect">
+              <%= m.label :value, m.object.meal_aspect.name %>
+              <%= m.text_field :value, class: 'meal-value' %><%= m.object.meal_aspect.unit %>
+            </div>
+
+            <%= m.hidden_field :meal_aspect_id, value: m.object.meal_aspect_id %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div style="margin-top: 6em; clear: both;"><%= f.submit class: 'btn primary' %></div>
+    <% end %>
+  </div>
+</div>
