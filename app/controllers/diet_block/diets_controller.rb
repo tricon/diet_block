@@ -1,7 +1,7 @@
 module DietBlock
-  class DietsController < ApplicationController
+  class DietsController < ::ApplicationController
     def index
-      @user = main_app.current_user.staff? ? User.find(params[:user_id]) : main_app.current_user
+      @user = current_user.staff? ? User.find(params[:user_id]) : current_user
       if params[:maintenance]
         @diets = @user.diets.where('`order` > ?', Settings.diets.last_week)
       else
