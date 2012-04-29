@@ -22,9 +22,11 @@ module DietBlock
         @diet.order += 1
       else
         @diet = Diet.new(order: Diet.default_order)
-        meal_types = @user.meal_plan.meal_types.includes(:meal_aspects)
-        meal_types.each do |mt|
-          mt.meal_aspects.each do |ma|
+      end
+      meal_types = @user.meal_plan.meal_types.includes(:meal_aspects)
+      meal_types.each do |mt|
+        mt.meal_aspects.each do |ma|
+          unless @diet.meals.exists?(meal_type_id: mt.id, meal_aspect_id: ma.id)
             @diet.meals.build(
               meal_type_id: mt.id,
               meal_aspect_id: ma.id,
