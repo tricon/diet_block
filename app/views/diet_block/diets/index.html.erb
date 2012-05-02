@@ -14,13 +14,13 @@
     </table>
   <% else %>
     <div class="diet-date-title">
-      <div class="week"><%= Settings.diets.default_title %></div>
-      <div class="small"><%= "Days 1 - #{Settings.diets.default_diet_expires_on_day}" %></div>
+      <div class="week"><%= Settings.diets.defaults[@user.program_week - 1]['title'] %></div>
+      <div class="small"><%= Settings.diets.defaults[@user.program_week - 1]['days'] %></div>
     </div>
     <div class="clear">
     </div>
     <div class="meal-type">
-      <div class="pad"><%= Settings.diets.default.html_safe %></div>
+      <div class="pad"><%= Settings.diets.defaults[@user.program_week - 1]['body'] %></div>
     </div>
   <% end %>
 </div>

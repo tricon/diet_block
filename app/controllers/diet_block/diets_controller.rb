@@ -1,3 +1,5 @@
+require 'deep_cloneable'
+
 module DietBlock
   class DietsController < ::ApplicationController
     def index
@@ -18,7 +20,7 @@ module DietBlock
         return redirect_to action: :index
       end
       if @user.diets.present?
-        @diet = @user.diets.order('`order` DESC').first
+        @diet = @user.diets.order('`order` DESC').first.dup(include: :meals)
         @diet.order += 1
       else
         @diet = Diet.new(order: Diet.default_order)
@@ -40,8 +42,7 @@ module DietBlock
 
     def create
       @user = User.find(params[:user_id])
-      @diet = DietPlan.new(params[:diet])
-      @diet.user = @user
+      @diet = @user.diets.build(params[:diet])
       @diet.save
 
       respond_with(@diet) do |format|
