@@ -2,7 +2,7 @@
 <div class="row">
   <div class="span6 offset1 new-diet-plan-weekly-photo">
     <% if @user.weekly_photo.present? %>
-      <%= link_to(image_tag(@user.weekly_photo.image.url(:large)), main_app.user_weekly_photo_path(@user, @user.weekly_photo)) %>
+      <%= link_to(image_tag(@user.weekly_photo.image.url(:medium)), main_app.user_weekly_photo_path(@user, @user.weekly_photo)) %>
     <% else %>
       <%= image_tag "/images/weekly_photo_placeholder.jpg" %>
     <% end %>
