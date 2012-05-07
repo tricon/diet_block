@@ -12,7 +12,7 @@
         <%= render @diets %>
       </tbody>
     </table>
-  <% else %>
+  <% elsif Settings.diets.defaults[@user.program_week - 1] %>
     <div class="diet-date-title">
       <div class="week"><%= Settings.diets.defaults[@user.program_week - 1]['title'] %></div>
       <div class="small"><%= Settings.diets.defaults[@user.program_week - 1]['days'] %></div>
@@ -21,6 +21,10 @@
     </div>
     <div class="meal-type">
       <div class="pad"><%= Settings.diets.defaults[@user.program_week - 1]['body'] %></div>
+    </div>
+  <% else %>
+    <div class="diet-date-title">
+      No diet
     </div>
   <% end %>
 </div>
