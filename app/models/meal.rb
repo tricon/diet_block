@@ -4,7 +4,7 @@ class Meal < ActiveRecord::Base
   belongs_to :meal_aspect
 
   validates_presence_of :meal_type_id, :message => 'must belong to a meal type'
-  validates_presence_of :meal_aspct_id, :message => 'must belong to a meal aspect'
-  validates_format_of :meal_type_id, :with => /^[\d]+$/, :message => 'must be a number'
-  validates_format_of :meal_aspect_id, :with => /^[\d]+$/, :message => 'must be a number'
+  validates_presence_of :meal_aspect_id, :message => 'must belong to a meal aspect'
+  validates_numericality_of :meal_type_id, greater_than: 0, :message => 'must be a number greater than 0'
+  validates_numericality_of :meal_aspect_id, greater_than: 0, :message => 'must be a number greater than 0'
 end
